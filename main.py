@@ -8,43 +8,49 @@ import random
 
 players = []
 dnu = [
-    'GO', 'Mediterranean Avenue', 'Community Chest', 'Baltic Avenue', 
-    'Income Tax', 'Reading Railroad', 'Oriental Avenue', 'Chance', 
-    'Vermont Avenue', 'Conneticut Avenue', 'Jail', 'St. Charles Place', 
-    'Electric Company', 'States Avenue', 'Virginia Avenue', 
-    'Pennsylvania Railroad', 'St. James Place', 'Community Chest', 
+    'GO', 'Mediterranean Avenue', 'Community Chest', 'Baltic Avenue',
+    'Income Tax', 'Reading Railroad', 'Oriental Avenue', 'Chance',
+    'Vermont Avenue', 'Conneticut Avenue', 'Jail', 'St. Charles Place',
+    'Electric Company', 'States Avenue', 'Virginia Avenue',
+    'Pennsylvania Railroad', 'St. James Place', 'Community Chest',
     'Tennessee Avenue', 'New York Avenue', 'Free Parking', 'Kentucky Avenue',
-    'Chance', 'Indiana Avenue', 'Illinois Avenue', 'B. & O. Railroad', 
-    'Atantic Avenue', 'Ventor Avenue', 'Water Works', 'Marvin Gardens', 
+    'Chance', 'Indiana Avenue', 'Illinois Avenue', 'B. & O. Railroad',
+    'Atantic Avenue', 'Ventor Avenue', 'Water Works', 'Marvin Gardens',
     'Go To Jail', 'Pacific Avenue', 'North Carolina Avenue', 'Community Chest',
-    'Pennsylvania Avenue', 'Short Line', 'Chance', 'Park Place', 'Luxury Tax', 
+    'Pennsylvania Avenue', 'Short Line', 'Chance', 'Park Place', 'Luxury Tax',
     'Boardwalk'
-    ]
+]
 board = []
 # lists for comparing when finsing space type
 properties = [
-    'Mediterranean Avenue', 'Baltic Avenue', 'Oriental Avenue', 
-    'Vermont Avenue', 'Conneticut Avenue', 'St. Charles Place', 
-    'States Avenue', 'Virginia Avenue', 'St. James Place', 
+    'Mediterranean Avenue', 'Baltic Avenue', 'Oriental Avenue',
+    'Vermont Avenue', 'Conneticut Avenue', 'St. Charles Place',
+    'States Avenue', 'Virginia Avenue', 'St. James Place',
     'Tennessee Avenue', 'New York Avenue', 'Kentucky Avenue',
-    'Indiana Avenue', 'Illinois Avenue', 'Atantic Avenue', 
-    'Ventor Avenue', 'Marvin Gardens', 'Pacific Avenue', 
-    'North Carolina Avenue', 'Pennsylvania Avenue', 'Park Place', 
+    'Indiana Avenue', 'Illinois Avenue', 'Atantic Avenue',
+    'Ventor Avenue', 'Marvin Gardens', 'Pacific Avenue',
+    'North Carolina Avenue', 'Pennsylvania Avenue', 'Park Place',
     'Boardwalk'
-    ]
+]
 railroads = ['Reading Railroad', 'Pennsylvania Railroad', 'B. & O. Railroad', 'Short Line']
 utilities = ['Electric Company', 'Water Works']
 # Decks and Discards
 chance_deck = [
-    'Advance to Boardwalk', 'Advance to Go', 'Advance to Illinois Avenue', 'Advance to St. Charles Place', 'Advance to the nearest Railroad',
-    'Advance to the nearest Railroad', 'Advance to nearest Utility', 'Bank pays you dividend of $50', 'Get Out of Jail Free', 'Go Back 3 Spaces'
-    'Go to Jail', 'Make general repairs on all your property. For each house pay $25. For each hotel pay $100', 'Speeding fine $15', 
-    'Take a trip to Reading Railroad', 'Elected Chairman of the Board. Pay each player $50', 'Your building loan matures. Collect $150'
+    'Advance to Boardwalk', 'Advance to Go', 'Advance to Illinois Avenue', 'Advance to St. Charles Place',
+    'Advance to the nearest Railroad',
+    'Advance to the nearest Railroad', 'Advance to nearest Utility', 'Bank pays you dividend of $50',
+    'Get Out of Jail Free', 'Go Back 3 Spaces'
+                            'Go to Jail',
+    'Make general repairs on all your property. For each house pay $25. For each hotel pay $100', 'Speeding fine $15',
+    'Take a trip to Reading Railroad', 'Elected Chairman of the Board. Pay each player $50',
+    'Your building loan matures. Collect $150'
 ]
 chance_discard = []
 community_chest_deck = [
-    'Advance to Go', 'Bank error in your favor', 'Doctors fee', 'sale of stock', 'Get Out of Jail Free', 'Go to Jail', 'Holiday fund matures',
-    'Income tax refund', 'It is your birthday', 'Life insurance matures', 'Pay hospital fees', 'Pay school fees', 'Receive $25 consultancy fee',
+    'Advance to Go', 'Bank error in your favor', 'Doctors fee', 'sale of stock', 'Get Out of Jail Free', 'Go to Jail',
+    'Holiday fund matures',
+    'Income tax refund', 'It is your birthday', 'Life insurance matures', 'Pay hospital fees', 'Pay school fees',
+    'Receive $25 consultancy fee',
     'You are assessed for street repair', 'You have won second prize in a beauty contest', 'You inherit'
 ]
 community_chest_discard = []
@@ -52,7 +58,8 @@ community_chest_discard = []
 max_houses = 32
 max_hotels = 12
 
-#FIXME: class User extends Player
+
+# FIXME: class User extends Player
 class Player:
     def __init__(self, name):
         self.name = name
@@ -61,25 +68,35 @@ class Player:
         self.properties = []
         self.inJail = False
         self.jailCards = 0
+
+    def __str__(self):
+        return self.name
+
     # Getters
     def get_cash(self):
         return self.cash
+
     def get_name(self):
         return self.name
+
     def get_position(self):
         return self.position
+
     def get_properties(self):
         return self.properties
+
     def get_distance(self, findSpace):
-        try:
-            findIndex = board.index(findSpace)
-            currentIndex = board.index(self.position)
-            distance = (currentIndex - findIndex) % len(board)
-            return min(distance, len(board) - distance)
-        except ValueError:
-            print('get_distance failed')
+        # try:
+        #     findIndex = board.index(findSpace)
+        #     currentIndex = board.index(self.position)
+        #     distance = (currentIndex - findIndex) % len(board)
+        #     return min(distance, len(board) - distance)
+        # except ValueError:
+        #     print('get_distance failed')
+
+        # distance = 0
         # for i in range(40):
-        #     checkSpace = board[self.position % i]
+        #     checkSpace = board[self.position + i]
         #     if findSpace == 'Railroad' and 'Railroad' in checkSpace.get_name():
         #         if i != 0:
         #             break
@@ -90,30 +107,59 @@ class Player:
         #         if i != 0:
         #             break
         #     distance += 1
+        # return distance
+        distance = board[self.position] - board.index(findSpace)
+        if distance < 0:
+            distance += 40
+        return distance
+
+    def get_nearest(self, findSpace):
+        if findSpace == 'Railroad':
+            reading = self.get_distance('Reading Railroad')
+            penn = self.get_distance('Pennsylvania Railroad')
+            bo = self.get_distance('B&O Railroad')
+            short = self.get_distance('Short Line')
+            distances = {'Reading Railroad': reading,
+                         'Pennsylvania Railroad': penn,
+                         'B&O Railroad': bo,
+                         'Short Line': short}
+            nearest_name = min(distances, key=distances.get)
+            return nearest_name
+
+
     # Modifiers
-    def buy(self, other):
-        self.charge(other.get_cost())
-        self.properties.append(other)
+    def buy(self, property):
+        self.charge(property.get_cost())
+        self.properties.append(property)
+        property.buy(self.name)
+
     def charge(self, amount):
         self.cash -= amount
+
     def fund(self, amount):
         self.cash += amount
+
     def pay(self, other, amount):
-        self.cash -= amount
+        self.charge(amount)
         other.cash += amount
+
     def move(self, spaces):
         self.position += spaces
         if self.position >= 40:
             self.position -= 40
             self.fund(200)
+
     def advance(self, Space):
         distance = self.get_distance(Space)
         self.move(distance)
+
     def go_to_jail(self):
         self.position = 10
         self.inJail = True
+
     def add_jail_card(self):
         self.jailCards += 1
+
     def repairs(self, house, hotels):
         cost = 0
         for property in self.properties:
@@ -124,32 +170,45 @@ class Player:
                 cost += hotels
         self.cash -= cost
 
-        
-#FIXME: class CPU extends Player
+
+# FIXME: class CPU extends Player
 
 class Tile:
-    def __init__(self, name, cost, rent, mortgage, mortgaged = False, status = 'unowned', owner = 'none'):
+    def __init__(self, name, cost, rent, mortgage, mortgaged=False, owned=False, owner='bank'):
         self.name = name
         self.cost = cost
         self.rent = rent
         self.mortgage = mortgage
         self.mortgaged = mortgaged
-        self.status = status
+        self.owned = owned
         self.owner = owner
         board.append(self)
+
+    def __str__(self):
+        return self.name
+
     def get_name(self):
         return self.name
-    def get_status(self):
-        return self.status
+
+    def get_owned(self):
+        return self.owned
+
     def get_cost(self):
         return self.cost
+
     def get_owner(self):
         return self.owner
 
+    def buy(self, buyer):
+        self.owned = True
+        self.owner = buyer
+
+
 class Property(Tile):
-    def __init__(self, name, color, cost, housecost, rent, house1, house2, house3, house4, hotel, mortgage, mortgaged = False, status = 'unowned', owner = 'none'):
-        super().__init__(name, cost, rent, mortgage, mortgaged, status, owner)
-        #would have been nice to automate this but monopoly costs have no patterns for some reason :(
+    def __init__(self, name, color, cost, housecost, rent, house1, house2, house3, house4, hotel, mortgage,
+                 mortgaged=False, owned=False, owner='bank'):
+        super().__init__(name, cost, rent, mortgage, mortgaged, owned, owner)
+        # would have been nice to automate this but monopoly costs have no patterns for some reason :(
         self.housecost = housecost
         self.house1 = house1
         self.house2 = house2
@@ -158,10 +217,13 @@ class Property(Tile):
         self.hotel = hotel
         self.color = color
         self.buildings = 0
-    def __str__(self):
-        return self.name
+
+    def get_rent(self):
+        return self.rent
+
     def getBuildings(self):
         return self.buildings
+
     def build(self, other, house_max, hotel_max):
         if self.buildings < 5:
             if other.get_cash() >= self.housecost:
@@ -176,6 +238,7 @@ class Property(Tile):
                     return f'Added a hotel to {self.name}. {self.name} has {self.buildings} .'
         else:
             return 'Max houses reached'
+
     def destroy(self, other, house_max, hotel_max):
         other.cash += 0.5 * (self.housecost)
         self.buildings -= 1
@@ -184,48 +247,57 @@ class Property(Tile):
         else:
             house_max += 1
 
-#FIXME: class Utility extends Space
+
+# FIXME: class Utility extends Space
 class Utility(Tile):
-    def __init__(self, name, cost, mortgage, mortgaged = False, status = 'unowned', owner = 'none'):
-        super().__init__(name, cost, mortgage, mortgaged, status, owner)
-    def get_rent(self, player, other, roll):
+    def __init__(self, name, cost, mortgage, mortgaged=False, owned=False, owner='none'):
+        super().__init__(name, cost, mortgage, mortgaged)
+
+    def get_rent(self):
         if self.name == 'Electric Company':
             other = 'Water Works'
-        else: 
+        else:
             other = 'Electric Company'
         if other in player.get_properties():
             rent = roll * 10
         else:
             rent = roll * 4
         return rent
-    
-#FIXME: class Railroad extends Tile
+
+
+# FIXME: class Railroad extends Tile
 class Railroad(Tile):
-    def __init__(self, name, cost, mortgage, mortgaged = False, status = 'unowned', owner = 'none'):
-        super().__init__(name, cost, mortgage, mortgaged, status, owner)
-    def get_rent(self, player):
-            # Workaround for if/in statement including self railroad.
+    def __init__(self, name, cost, mortgage, mortgaged=False, owned=False, owner='none'):
+        super().__init__(name, cost, mortgage, mortgaged)
+
+    def get_rent(self):
+        # Workaround for if/in statement including self railroad.
         rent = 25
         for property in player.get_properties:
             if 'Railroad' in property:
                 rent *= 2
         return rent
 
+
 # doesnt really need to be a class, but will shorten the code in the draw function
 class Chance:
     def __init__(self):
         board.append(self)
+
     def __str__(self):
         return 'Chance'
+
     def draw(self):
-        card = chance_deck[random.randint(0, 15)]
+        #card = chance_deck[random.randint(0, 15)]
+        card = "Advance to the nearest Railroad"
         print(f'You drew: {card}')
         if 'Advance to' in card:
             if 'nearest' in card:
                 location = card.replace('Advance to the nearest ', '')
             else:
                 location = card.replace('Advance to ', '')
-            player.advance(location)
+            location = player.get_nearest(location)
+            player.get_distance(location)
         elif card == 'Get Out of Jail Free':
             player.add_jail_card()
         elif card == 'Go Back 3 Spaces':
@@ -248,22 +320,31 @@ class Chance:
             print(f'Chance failed... Card name [{card}] not recognized')
         chance_deck.remove(card)
         chance_discard.append(card)
-    
+
+
 class CommunityChest:
     def __init__(self):
         board.append(self)
+
+    def __str__(self):
+        return 'Community Chest'
+
 
 class Special:
     def __init__(self, name):
         self.name = name
         board.append(self)
 
+    def __str__(self):
+        return self.name
+
+
 # FUNCTIONS
 
 def set_board():
     Special('GO')
     Property('Mediterranean_Avenue', 'brown', 60, 50, 2, 10, 30, 90, 160, 250, 30)
-    board.append('Community Chest')
+    CommunityChest()
     Property('Baltic Avenue', 'brown', 60, 50, 4, 20, 60, 180, 320, 450, 30)
     Special('Income Tax')
     Railroad('Reading Railroad', 200, 100)
@@ -302,6 +383,7 @@ def set_board():
     Special('Luxury Tax')
     Property('Boardwalk', 'blue', 400, 200, 50, 200, 600, 1400, 1700, 2000, 200)
 
+
 def get_num_players():
     playercount = False
     # while loop to keep prompting until valid num players
@@ -312,7 +394,8 @@ def get_num_players():
             playercount = True
         else:
             print('Error: please enter a mumber between 1 and 6')
-    return playercount
+    return num_players
+
 
 def get_players():
     num_players = get_num_players()
@@ -320,20 +403,25 @@ def get_players():
         player_name = str(input(f'Player {i + 1}, enter your name: '))
         players.append(Player(player_name))
 
+
 def dice_roll(turns):
-    #dice1 = random.randrange(1, 6)
-    #dice2 = random.randrange(1, 6)
-    die1 = 3
+    end = False
+    doubles = False
+    #die1 = random.randrange(1, 6)
+    #die2 = random.randrange(1, 6)
+    die1 = 4
     die2 = 3
     roll = die1 + die2
     if die1 == die2 and turns < 3:
         print(f'Wow! You rolled two {die1}s. You will move {roll} spaces and get amother turn!')
+        doubles = True
     elif die1 == die2 and turns >= 3:
         print('Uh Oh! You rolled 3 doubles in a row. You will go to jail for speeding.')
+        end = True
         # FIXME: go to jail
     else:
         print(f'You rolled a {die1} and a {die2}, and will move {roll} spaces.')
-    return roll
+    return roll, doubles, end
 
 
 if __name__ == '__main__':
@@ -350,21 +438,26 @@ if __name__ == '__main__':
     )
     set_board()
     get_players()
-    
-    # GAME LOGIC
-    for player in players:
-        # stops asking for commands when false (ends turn) *ONLY AT END OF COMMAND*
-        play = True
-        # used for deciding if a player can roll
-        rolled = False
-        print(f"{player.get_name()} is up.")
-        turns = 1
-        while play is True:
-            command = str(input(f'{player.get_name()}, what would you like to do: ')).lower()
 
-            if command == 'help':
-                print(
-                    '''
+    # GAME LOGIC
+    won = False
+    while not won:
+        for player in players:
+            # stops asking for commands when false (ends turn) *ONLY AT END OF COMMAND*
+            play = True
+            # used for deciding if a player can roll
+            rolled = False
+            # used for removing player if they forfeit
+            forfeit = False
+            print(f"{player.get_name()} is up.")
+            # simple counter for number of rolls per turn (not currently used)
+            turns = 0
+            while play is True:
+                command = str(input(f'{player.get_name()}, what would you like to do: ')).lower()
+
+                if command == 'help':
+                    print(
+                        '''
     Here is a list of commands: 
 
         help: thats me! help displays all available commands
@@ -376,54 +469,86 @@ if __name__ == '__main__':
         info: gives you all important information on a property
                     '''
                     )
-                
-            elif command == 'roll':
-                if rolled is False and turns <= 3:
+
+                elif command == 'roll':
+                    if rolled is False and turns <= 3:
                         ### DIE LOGIC ###
-                    roll = dice_roll(turns)
-                        ### TURN LOGIC ###
-                    if turns != 3:
-                        player.move(roll)
-                        current_space = board[player.get_position()]            # Equal to the item in the list
-                        print(f'You landed on: {current_space}.')
-                        if type(current_space) == Chance:
-                            current_space.draw()
-                        if type(current_space) == Property:
-                            # FIXME: add property is owned
-                            if current_space.get_status() == 'unowned':
-                                print(f'{current_space} is unowned.')
-                                if player.get_cash() < current_space.get_cost():
-                                    print('Uh oh! Looks like you cant afford this space. It will go to auction')
-                                    #FIXME add auction function
+                        roll, doubles, end = dice_roll(turns)
+                        # logic for rolling doubles
+                        if end is True:
+                            play = False
+                            break
+                            ### TURN LOGIC ###
+                        if turns != 3:
+                            # move player number rolled
+                            player.move(roll)
+                            # get the space the player is on
+                            current_space = board[player.get_position()]
+                            print(f'You landed on: {current_space}.')
+                            # chance logic
+                            if type(current_space) == Chance:
+                                current_space.draw()
+                            # logic for buyable space (Tile)
+                            elif isinstance(current_space, Tile):
+                                # FIXME: add property is owned
+                                if current_space.get_owned() == False:
+                                    print(f'{current_space} is unowned.')
+                                    if player.get_cash() < current_space.get_cost():
+                                        print('Uh oh! Looks like you cant afford this space. It will go to auction')
+                                        # FIXME add auction function
+                                    else:
+                                        bought = False
+                                        while not bought:
+                                            to_buy = str(input(
+                                                f'Would you like to buy {current_space} for {current_space.get_cost()}M? Your current balance is {player.get_cash()}M. ')).lower()
+                                            if to_buy == 'yes':
+                                                player.buy(current_space)
+                                                print(
+                                                    f'You have successfully purchased {current_space.get_name()}. Remaining balance is: {player.get_cash()}M.')
+                                                bought = True
+                                            else:
+                                                print("Please enter yes/no.")
                                 else:
-                                    bought = False
-                                    while not bought:
-                                        to_buy = str(input(f'Would you like to buy {current_space} for {current_space.get_cost()}M? Your current balance is {player.get_cash()}M. ')).lower()
-                                        if to_buy == 'yes':
-                                            player.buy(current_space)
-                                            print(f'You have successfully purchased {current_space.get_name()}. Remaining balance is: {player.get_cash()}M.')
-                                            bought = True
-                                        else:
-                                            print("Please enter yes/no.")
-                        turns += 1
+                                    rentToPay = current_space.get_rent()
+                                    spaceOwnerObj = next((player for player in players if player.name == current_space.get_owner()), None)
+                                    player.pay(spaceOwnerObj, rentToPay)
+                                    print(
+                                        f'{current_space} is owned by {current_space.get_owner()}. You will pay them ${rentToPay}M. Your current balance is ${player.get_cash}M')
+                            elif type(current_space) == Special:
+                                # FIXME: create special space logic
+                                print('space logic incomplete...')
+                            turns += 1
+                            if not doubles:
+                                rolled = True
+                    else:
+                        print("Looks like you've already rolled. If you're ready to end your turn, use end.")
+
+                #  FIXME: elif command == 'distance'        #return number of spaces from specified space
+
+                #  FIXME: elif command == 'money'        #returns player money
+
+                elif command == 'end':
+                    play = False
+
+                elif command == 'kill':
+                    exit()
+
+                elif command == 'balance':
+                    print(f'You have ${player.get_cash()}M.')
+
+                elif command == 'forfeit':
+                    forfeit = True
+                    break
+
                 else:
-                    print("Looks like youve already rolled. If youre ready to end your turn, use end.")
+                    print(f"'{command}' is not a registered command.")
 
-            #  FIXME: elif command == 'distance'        #return number of spaces from specified space
-
-            #  FIXME: elif command == 'money'        #returns player money
-
-            elif command == 'end':
-                play = False
-
-            elif command == 'kill':
-                exit()
-
-            elif command == 'balance':
-                print(f'You have ${player.get_cash()}M.')
-
-            else:
-                print(f"'{command}' is not a registered command.")
-
-        print(turns)
-        #end of player turn
+            print(turns)
+            if player.get_cash() < 0 or forfeit is True:
+                players.remove(player)
+                print(f'players: {players}')
+                if len(players) < 2:
+                    print(f'Game won by: {players[0]}')
+                    won = True
+                # FIXME: add logic for returning properties to unowned
+            # end of player turn
